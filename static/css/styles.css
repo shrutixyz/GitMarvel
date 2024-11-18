@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #1F0C3C;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 10px 20px;
+}
+
+.logo {
+    height: 1.25rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2.25rem;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    opacity: 0.7;
+}
+
+.nav-links li a:hover {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.nav-links .active {
+    opacity: 1;
+    border-bottom: 2px solid #E116E1;
+}
+
+.top-btn {
+    background-color: #ffffff;
+    border: 1px #E40EB9;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+section {
+    padding: 10px 20px;
+}
+/* hero section */
+.hero-container, .sub-hero-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.left {
+    width: 50%;
+}
+
+.hero-container p {
+    font-size: 2.5rem
+}
+
+.hero-container span {
+    color: #05E8ED;
+}
+
+.hero {
+    height: 80vh;
+}
+
+.accent-btn {
+    cursor: pointer;
+    background: linear-gradient(90deg, #E116E1, #E70AA1); /* Two-color gradient */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 0.25rem;
+    padding: 0.75rem 3rem;
+    color: white;
+    margin-top: 1rem;
+    border: none;
+}
+
+/* section 1 */
+.sub-hero-container {
+    margin-top: 5rem;
+}
+.sub-hero-container .left p {
+    font-size: 2rem;
+    color: #05E8ED;
+}
+
+.sub-hero-container .left .subtext {
+    font-size: 1rem;
+    color: white;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+}
+
+.sub-hero-container .left img {
+    height: 30%;
+}
+
+.terminals {
+    width: 80%;
+}
+
+
+/* section 3 */
+.toc-container {
+    margin-top: 5rem;
+}
+
+.toc-text-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: self-start;
+    margin-top: 3rem;
+}
+
+.toc-text-container .right {
+    margin-left: 2rem;
+}
+
+.toc-container .title {
+    color: #05E8ED;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.toc {
+    width: 40%;
+}
+
+.toc p {
+    font-size: 1rem;
+    color: white;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+    font-weight: 200;
+}
+
+/* section 4 */
+
+.toc-container .subtitle {
+    font-size: 1rem;
+    color: white;
+    opacity: 0.6;
+    margin-top: 0.75rem;
+}
+
+.toc-container img {
+    width: 50%;
+    align-self: flex-start;
+    cursor: pointer;
+}
+
+.toc-container img:hover {
+    opacity: 0.8;
+}
+
+/* footer */
+footer {
+    border-top: 2px solid #E116E1;
+    text-align: center;
+    margin-top: 7rem;
+    width: 100%;
+    color: white;
+    padding: 1rem;
+}
+
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}

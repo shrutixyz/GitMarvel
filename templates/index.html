@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Nav Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" />
+        </div>
+        <ul class="nav-links">
+            <li><a class="active" href="#home">Home</a></li>
+            <li><a>About</a></li>
+            <li><a>Team</a></li>
+            <li><a>Terms & Co</a></li>
+            <li><a>Contact</a></li>
+        </ul>
+        <button class="top-btn">Get In Touch</button>
+    </nav>
+    <section class="hero-container">
+        <div class="left">
+            <p>
+                Visualize, Analyze, and Level Up Your Code on 
+                <span>GitHub</span>
+            </p>
+            <button class="accent-btn" onclick="getStarted()">Get Started</button>
+        </div>
+        <div class="right">
+            <img  class="hero" src="{{ url_for('static', filename='images/landing.svg') }}" alt="Logo" />
+        </div>
+    </section>
+    <section class="sub-hero-container"> 
+        <div class="left">
+            <p class="title">Why Settle for Average? Let’s Analyze Everything.</p>
+            <p class="subtext">Our tool uses state-of-the-art AI to review your code commits, decode your GitHub profile, and tell the story of your repos like never before. Build credibility. Get insights. Impress recruiters.</p>
+        </div>
+        <div class="right">
+            <img  class="sub-hero" src="{{ url_for('static', filename='images/section1.svg') }}" alt="Logo" />
+        </div>
+    </section>
+    <section class="sub-hero-container"> 
+        <div class="left">
+            <img  class="terminals" src="{{ url_for('static', filename='images/left-terminal.svg') }}" alt="Logo" />
+        </div>
+        <div class="right">
+            <img  class="terminals" src="{{ url_for('static', filename='images/right-terminal.svg') }}" alt="Logo" />
+        </div>
+    </section>
+    <section class="toc-container"> 
+        <p class="title"> Terms Of Use</p>
+        <div class="toc-text-container">
+            <div class="left toc">
+               <p class="subtext">
+                Welcome to Git Marvel! By accessing or using our platform, you agree to these terms of use. Git Marvel provides AI-powered insights for your GitHub profile, commits, and repositories, aiming to help you optimize your coding presence. While we strive to deliver accurate and actionable recommendations, all insights are for informational purposes only and should not be considered definitive evaluations. You retain full ownership of your GitHub data; Git Marvel does not modify or store your repositories beyond temporary processing.
+               </p>
+            </div>
+            <div class="right toc">
+                <p class="subtext">
+                    By using Git Marvel, you agree to use the platform responsibly and comply with GitHub's terms of service. We do not claim any rights to your code, nor do we guarantee that our analyses will directly improve your coding skills, job prospects, or project performance. Git Marvel reserves the right to suspend or terminate access to users who misuse the service, violate these terms, or engage in harmful activities. For further details on how we handle your data, please refer to our Privacy Policy.
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="toc-container"> 
+        <p class="title"> Who are the devs behind? </p>
+        <p class="subtitle">We’re just two ordinary developers who try to make cool things once in a while ;)</p>
+        <div class="toc-text-container">
+            <div class="left toc">
+                <img  class="terminals" src="{{ url_for('static', filename='images/aakash-github-card.svg') }}" alt="Logo" />
+                <p>Aakash Shrivastava</p>
+            </div>
+            <div class="right toc">
+                <img  class="terminals" src="{{ url_for('static', filename='images/shruti-github-card.svg') }}" alt="Logo" />
+                <p>Shruti Gupta </p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        GITMARVEL @2024
+    </footer>
+</body>
+</html>
