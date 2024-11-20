@@ -22,17 +22,19 @@ CORS(app)  # This will allow all origins by default
 def index():
     return render_template('index.html')
 
-@app.route('/dashboard/')
-def dashboard():
-    return render_template('dashboard.html')
-
 @app.route('/get-started/')
 def getstarted():
+    access_token = session.get('github_access_token')
+
+    if access_token:
+        return redirect(url_for('dashboard'))
+    
     github_login_url = f"{GITHUB_AUTH_URL}?client_id={CLIENT_ID}&scope=read:user"
     return render_template('get-started.html', github_login_url=github_login_url)
 
 @app.route('/auth/github/callback')
 def callback():
+    
     code = request.args.get('code')
 
     # Exchange the code for an access token
@@ -50,22 +52,22 @@ def callback():
 
     if access_token:
         session['github_access_token'] = access_token
-        return redirect(url_for('profile'))
+        return redirect(url_for('dashboard'))
     else:
         return "Authorization failed", 400
     
-@app.route('/profile')
-def profile():
+@app.route('/dashboard')
+def dashboard():
     access_token = session.get('github_access_token')
     if not access_token:
-        return redirect(url_for('login'))
+        return redirect(url_for('get-started'))
 
     user_response = requests.get(
         GITHUB_API_URL,
         headers={'Authorization': f'Bearer {access_token}'}
     )
     user_data = user_response.json()
-    return f"<h1>Welcome, {user_data.get('login')}</h1><p>{user_data}</p>"
+    return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'))
 
 
 if __name__ == "__main__":
