@@ -95,6 +95,11 @@ section {
     border: none;
 }
 
+.accent-btn a {
+    text-decoration: none;
+    color: white;
+}
+
 /* section 1 */
 .sub-hero-container {
     margin-top: 5rem;
