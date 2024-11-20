@@ -16,6 +16,7 @@ GITHUB_AUTH_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL = "https://api.github.com/user"
 GITHUB_REPOS_URL = "https://api.github.com/user/repos"
+GITHUB_API_BASE_URL = "https://api.github.com"
 CORS(app)  # This will allow all origins by default
 
 
@@ -76,6 +77,51 @@ def dashboard():
     else:
         print( f"Error: {repos_response.status_code}", 500)
     return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'), repos = repos)
+
+
+@app.route('/code-review')
+def code_review():
+    data = request.json
+    repo_name = data.get('repo_name')
+    commit_sha = data.get('commit_sha')
+    owner = data.get('owner')
+    github_token = session.get('github_access_token') # Pass user's GitHub token securely
+
+    if not repo_name or not commit_sha or not github_token:
+        return jsonify({"error": "repo_name, commit_sha, and github_token are required"}), 400
+
+    # Step 1: Fetch commit details from GitHub
+    commit_url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo_name}/commits/{commit_sha}"
+    headers = {'Authorization': f'Bearer {github_token}'}
+    commit_response = requests.get(commit_url, headers=headers)
+
+    if commit_response.status_code != 200:
+        return jsonify({"error": "Failed to fetch commit details", "details": commit_response.text}), 500
+
+    commit_data = commit_response.json()
+    files = commit_data.get('files', [])
+
+    # Step 2: Fetch file contents and prepare for AI review
+    file_reviews = []
+    for file in files:
+        file_path = file['filename']
+        raw_url = file['raw_url']
+
+        # Fetch file content
+        file_response = requests.get(raw_url, headers=headers)
+        if file_response.status_code != 200:
+            return jsonify({"error": f"Failed to fetch file content for {file_path}"}), 500
+
+        file_content = file_response.text
+
+        # Prepare data for AI agent
+        file_reviews.append({
+            "filename": file_path,
+            "content": file_content
+        })
+
+    # todo: send data to ai agent
+    return jsonify({"review_comments": file_reviews})
 
 
 if __name__ == "__main__":
