@@ -14,7 +14,8 @@ CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 GITHUB_AUTH_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
-GITHUB_API_URL = "https://api.github.com/user"
+GITHUB_USER_URL = "https://api.github.com/user"
+GITHUB_REPOS_URL = "https://api.github.com/user/repos"
 CORS(app)  # This will allow all origins by default
 
 
@@ -63,11 +64,18 @@ def dashboard():
         return redirect(url_for('get-started'))
 
     user_response = requests.get(
-        GITHUB_API_URL,
+        GITHUB_USER_URL,
         headers={'Authorization': f'Bearer {access_token}'}
     )
     user_data = user_response.json()
-    return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'))
+
+    repos_response = requests.get(GITHUB_REPOS_URL, headers={'Authorization': f'Bearer {access_token}'})
+
+    if repos_response.status_code == 200:
+        repos = repos_response.json()  # List of repository objects
+    else:
+        print( f"Error: {repos_response.status_code}", 500)
+    return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'), repos = repos)
 
 
 if __name__ == "__main__":

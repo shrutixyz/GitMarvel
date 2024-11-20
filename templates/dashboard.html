@@ -32,10 +32,9 @@
             <p>Hey there, what can I do for you?</p>
             <div class="select-container">
                 <select id="repository-select" class="custom-select">
-                    <option value="" disabled selected>Select Repository</option>
-                    <option value="repo1">Repository 1</option>
-                    <option value="repo2">Repository 2</option>
-                    <option value="repo3">Repository 3</option>
+                    {% for repo in repos %}
+                        <option value="{{ repo.full_name }}">{{ repo.name }}</option>
+                    {% endfor %}
                 </select>
                 <button class="select-button">
                     <img src="{{ url_for('static', filename='icons/down-arrow.svg') }}"></img> <!-- Replace with your icon or image -->
