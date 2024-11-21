@@ -16,10 +16,12 @@ body {
     justify-content: space-between;
     color: white;
     padding: 10px 20px;
+    padding-top: 1rem;
 }
 
 .logo {
-    height: 1.25rem;
+    height: 1rem;
+    cursor: pointer;
 }
 
 .nav-links {
@@ -31,7 +33,7 @@ body {
 .nav-links li a {
     text-decoration: none;
     color: white;
-    font-size: 16px;
+    font-size: 0.9rem;
     transition: color 0.3s ease;
     opacity: 0.7;
 }
@@ -47,8 +49,9 @@ body {
 }
 
 .top-btn {
+    width: 10rem;
     background-color: #ffffff;
-    border: 1px #E40EB9;
+    border: 1px solid #E40EB9;
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
 }
@@ -67,6 +70,8 @@ section {
     align-items: center;
     color: white;
 }
+
+
 
 .left {
     width: 50%;
@@ -120,6 +125,7 @@ section {
     height: 30%;
 }
 
+
 .terminals {
     width: 80%;
 }
@@ -141,6 +147,9 @@ section {
     margin-left: 2rem;
 }
 
+.special{
+    margin-right: -2rem;
+}
 .toc-container .title {
     color: #05E8ED;
     font-size: 2rem;
@@ -196,4 +205,14 @@ footer {
         align-items: center;
         gap: 10px;
     }
+}
+
+
+.githubspan{
+    font-style: italic;
+    font-weight: 400;
+}
+
+.hook{
+    width: 30rem;
 }

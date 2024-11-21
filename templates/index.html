@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Nav Bar</title>
+    <title>GitMarvel - Make your code stand out!</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo-small.svg') }}"type="image/x-icon">
 </head>
 <body>
     <nav class="navbar">
         <div class="logo-container">
-            <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" />
+            <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" onclick="window.location.href='/'" alt="Logo" />
         </div>
         <ul class="nav-links">
             <li><a class="active" href="#home">Home</a></li>
@@ -23,19 +24,19 @@
     </nav>
     <section class="hero-container">
         <div class="left">
-            <p>
+            <p class="hook">
                 Visualize, Analyze, and Level Up Your Code on 
-                <span>GitHub</span>
+                <span class="githubspan">GitHub</span>
             </p>
             <button class="accent-btn" onclick="getStarted()">Get Started</button>
         </div>
-        <div class="right">
+        <div class="right special">
             <img  class="hero" src="{{ url_for('static', filename='images/landing.svg') }}" alt="Logo" />
         </div>
     </section>
-    <section class="sub-hero-container"> 
+    <section class="sub-hero-container">  
         <div class="left">
-            <p class="title">Why Settle for Average? Let’s Analyze Everything.</p>
+            <p class="title">Why Settle for Average? Let's Analyze Everything.</p>
             <p class="subtext">Our tool uses state-of-the-art AI to review your code commits, decode your GitHub profile, and tell the story of your repos like never before. Build credibility. Get insights. Impress recruiters.</p>
         </div>
         <div class="right">
@@ -67,7 +68,7 @@
     </section>
     <section class="toc-container"> 
         <p class="title"> Who are the devs behind? </p>
-        <p class="subtitle">We’re just two ordinary developers who try to make cool things once in a while ;)</p>
+        <p class="subtitle">We're just two ordinary developers who try to make cool things once in a while ;)</p>
         <div class="toc-text-container">
             <div class="left toc">
                 <img  class="terminals" src="{{ url_for('static', filename='images/aakash-github-card.svg') }}" alt="Logo" />
