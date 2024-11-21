@@ -15,17 +15,22 @@
             <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" />
         </div>
         <ul class="nav-links">
-            <li><a class="active" href="#home">Home</a></li>
+            <!-- <li><a class="active" href="#home">Home</a></li>
             <li><a>About</a></li>
             <li><a>Team</a></li>
             <li><a>Terms & Co</a></li>
-            <li><a>Contact</a></li>
+            <li><a>Contact</a></li> -->
         </ul>
-        <div class="user-profile">
-            <div class="avatar">
-                <img src="{{avatar_url}}" alt="">
+        <!-- onclick="window.location.href='/logout'" -->
+        <div>
+            <div class="user-profile" onclick="logoutvisible()">
+                <div class="avatar">
+                    <img src="{{avatar_url}}" alt="">
+                </div>
+                <p>{{userName}}</p>
+                <p style="font-size: 0.8rem; display: none; margin-right: 2rem;" onclick="window.location.href='/logout'" id="logout" >logout?</p>
             </div>
-            <p>{{userName}}</p>
+            
         </div>
     </nav>
     <main>
@@ -66,10 +71,22 @@
                 </button>
             </div>           
         </div>
+        <footer class="dashboardfooter">
+            GITMARVEL @2024
+        </footer>
     </main>
-    
-    <footer>
-        GITMARVEL @2024
-    </footer>
+<script>
+    function logoutvisible(){
+        console.log("lols")
+        var vis = document.getElementById("logout").style.display;
+        console.log(vis)
+        if(vis=="none"){
+            document.getElementById("logout").style.display = "block";
+        }
+        else{
+            document.getElementById("logout").style.display="none"
+        }
+    }
+</script>
 </body>
 </html>

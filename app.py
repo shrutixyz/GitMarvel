@@ -124,5 +124,11 @@ def code_review():
     return jsonify({"review_comments": file_reviews})
 
 
+@app.route('/logout')
+def logout():
+    session.pop('github_access_token')
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

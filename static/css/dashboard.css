@@ -1,7 +1,12 @@
 .user-profile {
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
+    gap: 1rem;
     align-items: center;
+    background-color: #D9D9D930;
+    border-radius: 20rem;
+    min-width: 10rem;
+    cursor: pointer;
 }
 
 .avatar {
@@ -98,18 +103,22 @@ main {
     border-radius: 25px;
     padding: 5px 10px;
     background-color:  #2A284A;
+    /* background-color: red; */
     margin-top: 2rem;
+    color: white;
   }
   
   .chat-input {
+    height: 100%;
     flex-grow: 1;
     border: none;
     padding: 10px;
     font-size: 14px;
     border-radius: 20px;
     outline: none;
-    color: #333;
+    color: white;
     background-color:  #2A284A;
+    /* background-color: pink; */
   }
   
   .chat-input::placeholder {
@@ -171,3 +180,18 @@ main {
   }
   
   
+
+  .dashboardfooter{
+bottom: 0;
+position: fixed;
+  }
+
+.logout{
+  height: 2rem;
+  width: 10rem;
+  background-color: #ffffff10;
+  border-radius: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

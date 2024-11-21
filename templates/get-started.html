@@ -10,14 +10,14 @@
 <body>
     <nav class="navbar">
         <div class="logo-container">
-            <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" />
+            <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" onclick="window.location.href='/'"/>
         </div>
         <ul class="nav-links">
-            <li><a class="active" href="#home">Home</a></li>
+            <!-- <li><a class="active" href="#home">Home</a></li>
             <li><a>About</a></li>
             <li><a>Team</a></li>
             <li><a>Terms & Co</a></li>
-            <li><a>Contact</a></li>
+            <li><a>Contact</a></li> -->
         </ul>
         <button class="top-btn">Get In Touch</button>
     </nav>
@@ -25,7 +25,7 @@
         <div class="left">
             <p>
                 Sign In with Github to start using 
-                <span>Gitmarvel</span>
+                <span class="githubspan">GitMarvel</span>
             </p>
             <button class="accent-btn"><a href="{{ github_login_url }}">Login with GitHub</a></button>
         </div>

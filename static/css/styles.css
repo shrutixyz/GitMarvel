@@ -54,6 +54,7 @@ body {
     border: 1px solid #E40EB9;
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
+    cursor: pointer;
 }
 
 button:hover {
@@ -147,6 +148,17 @@ section {
     margin-left: 2rem;
 }
 
+.toc-text-container2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: self-start;
+    margin-top: 3rem;
+}
+
+.toc-text-container2 .right {
+    margin-left: 1rem;
+}
+
 .special{
     margin-right: -2rem;
 }
@@ -160,7 +172,19 @@ section {
     width: 40%;
 }
 
+.toc2 {
+    width: 30%;
+}
+
 .toc p {
+    font-size: 1rem;
+    color: white;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+    font-weight: 200;
+}
+
+.toc2 p {
     font-size: 1rem;
     color: white;
     opacity: 0.6;

@@ -14,15 +14,15 @@
             <img  class="logo" src="{{ url_for('static', filename='images/logo.svg') }}" onclick="window.location.href='/'" alt="Logo" />
         </div>
         <ul class="nav-links">
-            <li><a class="active" href="#home">Home</a></li>
-            <li><a>About</a></li>
-            <li><a>Team</a></li>
-            <li><a>Terms & Co</a></li>
-            <li><a>Contact</a></li>
+            <li><a class="active" href="">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#terms">Terms of Use</a></li>
+            <li><a href="#team">Team</a></li>
+            <!-- <li><a>Contact</a></li> -->
         </ul>
-        <button class="top-btn">Get In Touch</button>
+        <button class="top-btn" onclick="window.location.href='mailto:zaniecompany@gmail.com'">Get In Touch</button>
     </nav>
-    <section class="hero-container">
+    <section class="hero-container" id="home">
         <div class="left">
             <p class="hook">
                 Visualize, Analyze, and Level Up Your Code on 
@@ -30,11 +30,11 @@
             </p>
             <button class="accent-btn" onclick="getStarted()">Get Started</button>
         </div>
-        <div class="right special">
+        <div class="right">
             <img  class="hero" src="{{ url_for('static', filename='images/landing.svg') }}" alt="Logo" />
         </div>
     </section>
-    <section class="sub-hero-container">  
+    <section class="sub-hero-container" id="about">  
         <div class="left">
             <p class="title">Why Settle for Average? Let's Analyze Everything.</p>
             <p class="subtext">Our tool uses state-of-the-art AI to review your code commits, decode your GitHub profile, and tell the story of your repos like never before. Build credibility. Get insights. Impress recruiters.</p>
@@ -45,13 +45,13 @@
     </section>
     <section class="sub-hero-container"> 
         <div class="left">
-            <img  class="terminals" src="{{ url_for('static', filename='images/left-terminal.svg') }}" alt="Logo" />
+            <img  class="terminals" src="{{ url_for('static', filename='images/left-terminal2.svg') }}" alt="Logo" />
         </div>
         <div class="right">
-            <img  class="terminals" src="{{ url_for('static', filename='images/right-terminal.svg') }}" alt="Logo" />
+            <img  class="terminals" src="{{ url_for('static', filename='images/right-terminal2.svg') }}" alt="Logo" />
         </div>
     </section>
-    <section class="toc-container"> 
+    <section class="toc-container" id="terms"> 
         <p class="title"> Terms Of Use</p>
         <div class="toc-text-container">
             <div class="left toc">
@@ -66,16 +66,16 @@
             </div>
         </div>
     </section>
-    <section class="toc-container"> 
+    <section class="toc-container"  id="team"> 
         <p class="title"> Who are the devs behind? </p>
         <p class="subtitle">We're just two ordinary developers who try to make cool things once in a while ;)</p>
-        <div class="toc-text-container">
-            <div class="left toc">
-                <img  class="terminals" src="{{ url_for('static', filename='images/aakash-github-card.svg') }}" alt="Logo" />
+        <div class="toc-text-container2">
+            <div class="left toc2">
+                <img  class="terminals" src="{{ url_for('static', filename='images/aakash-github-card.svg') }}" alt="Logo"  onclick="window.location.href='https://github.com/aakzsh'" />
                 <p>Aakash Shrivastava</p>
             </div>
-            <div class="right toc">
-                <img  class="terminals" src="{{ url_for('static', filename='images/shruti-github-card.svg') }}" alt="Logo" />
+            <div class="right toc2">
+                <img  class="terminals" src="{{ url_for('static', filename='images/shruti-github-card.svg') }}" alt="Logo"  onclick="window.location.href='https://github.com/shrutixyz'"/>
                 <p>Shruti Gupta </p>
             </div>
         </div>
