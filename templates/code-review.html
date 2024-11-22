@@ -9,6 +9,7 @@
 
     <title>GitMarvel - Make your code stand out!</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo-small.svg') }}"type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -54,9 +55,7 @@
                 </button>
             </div>
             
-            <div class="review-container" id="reviews-container">
-                <!-- Code review items will be populated here -->
-            </div>
+            <div id="html-output"></div>
         </div>
         <footer class="dashboardfooter">
             GITMARVEL @2024

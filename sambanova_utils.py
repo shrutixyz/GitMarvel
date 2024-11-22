@@ -28,7 +28,7 @@ def testai(code_content, language):
             """ } ],
     temperature=0.1,
     top_p=0.1)
-    result = response.choices[0].message.content
+    result = parse_markdown(response.choices[0].message.content)
     
     return result
 
@@ -131,3 +131,7 @@ def get_profile_analysis_from_stats(username, profile_stats):
 
     result = response.choices[0].message.content
     return result
+
+def parse_markdown(content):
+    content = content.replace("\n", "<br/>")
+    return content
