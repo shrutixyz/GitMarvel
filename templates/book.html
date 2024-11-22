@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipping Page UI</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
+    
+</head>
+<body>
+  <h1>Journey of {{repo}}</h1>
+  <div class="book">
+    {% if isImagePresent %}
+    {% for image_url, paragraph in pages %}
+
+        <div class="page" id="page{{ loop.index }}">
+            <!-- <h2>Page {{ loop.index }}</h2> -->
+            <img class="display-img" src="{{ image_url }}" alt="Image for page {{ loop.index }}">
+            <p>{{ paragraph }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    {% for paragraph in pages %}
+        <div class="page" id="page{{ pages.length - loop.index }}">
+            <h2>Page {{ loop.index }}</h2>
+            <p>{{ paragraph }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+  </div>
+
+  <button id="restart-btn">Restart Reading</button>
+  <span>tap anywhere on the book to flip pages</span>
+
+  <script>
+    const pages = document.querySelectorAll('.page');
+const restartButton = document.getElementById('restart-btn');
+
+
+    // Add click event to each page to flip it
+pages.forEach((page, index) => {
+    page.addEventListener('click', () => {
+      if (page.classList.contains('flip')) {
+        page.classList.remove('flip');
+      } else {
+        page.classList.add('flip');
+      }
+  
+      // Show the restart button when the last page is flipped
+      if (index === pages.length - 1 && !page.classList.contains('flip')) {
+        restartButton.classList.remove('hidden');
+      }
+    });
+  });
+
+
+
+
+// Add click event to the restart button to reset pages
+restartButton.addEventListener('click', () => {
+  pages.forEach(page => page.classList.remove('flip'));
+//   restartButton.classList.add('hidden');
+});
+
+  </script>
+</body>
+</html>

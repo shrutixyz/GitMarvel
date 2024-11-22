@@ -150,7 +150,7 @@ def code_review():
             return jsonify({"error": f"Failed to fetch file content for {file_path}"}), 500
 
         file_content = file_response.text
-        print(file_content  )
+ 
         language = get_language_from_extension(file_path)
         fileresponse = testai(file_content[:2000] if len(file_content) > 2000 else file_content, language=language)
 
@@ -160,11 +160,8 @@ def code_review():
         })
     return jsonify({"review_comments": file_reviews})
 
-@app.route('/story-telling', methods=['POST'])
-def story_telling():
-    data = request.json
-    repo_name = data.get('repo_name')
-    owner = data.get('owner')
+@app.route('/story-telling/<repo_name>/<owner>')
+def story_telling(repo_name, owner):
 
     github_token = session.get('github_access_token') 
 
@@ -192,7 +189,16 @@ def story_telling():
         ]
 
         # send message to ai
-        return jsonify(commit_list)
+        isImagePresent = False
+        response = get_story_from_commit_history(repo_name=repo_name, commits_list=commit_list, owner=owner)
+        if (len(response["image_urls"]) > 0):
+            isImagePresent = True
+            pages = list(zip(response["image_urls"][::-1], response["paragraphs"][::-1]))
+        else:
+            pages = response["paragraphs"][::-1]
+        return render_template('book.html', pages = pages, isImagePresent= isImagePresent, repo=repo_name)
+
+        # return response["paragraphs"]
     return jsonify({"error": f"Failed to fetch commits: {commit_response.status_code}"}), commit_response.status_code
 
 @app.route('/logout')
@@ -319,6 +325,10 @@ def get_code_review():
     avatar_url = session.get('avatar_url')
     repos = session.get('filtered_repo')
     return render_template('code-review.html', userName=userName, avatar_url = avatar_url, repos = repos)
+
+@app.route('/book')
+def book():
+    return render_template('book.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

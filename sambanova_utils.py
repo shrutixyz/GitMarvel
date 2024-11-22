@@ -3,6 +3,9 @@ import json
 from dotenv import load_dotenv
 import openai
 import os
+import requests
+from flask import  jsonify
+import ast
 
 load_dotenv()
 
@@ -10,6 +13,8 @@ sambanovaClient = openai.OpenAI(
     api_key=os.environ.get("SAMBANOVA_API_KEY"),
     base_url="https://api.sambanova.ai/v1",
 )
+
+pixabay_api_key=os.environ.get("PIXABAY_API_KEY")
 
 def testai(code_content, language):
     print(code_content[:100], language)
@@ -84,14 +89,61 @@ def get_story_from_commit_history(repo_name, commits_list, owner):
         },
         {
             "role": "user",
-            "content": f""" Using the following commit list for repository {repo_name} owned by {owner}, create an interesting story. 
+            "content": f""" Using the following commit list for repository {repo_name} owned by {owner}, create an interesting story within 300-400 words in paragraphs. Use single quotes for dialogues
             commit list:  ``` json  {commits_list}```
             """ } ],
     temperature=0.1,
     top_p=0.1)
 
+    result = response.choices[0].message.content.split("\n\n")
+    image_urls = []
+    try:
+        keywords_list = ast.literal_eval(generate_keywords_for_images(result))
+
+        if len(keywords_list) > len(result):
+            keywords_list = keywords_list[:len(result)]
+        for keyword in keywords_list:
+     
+            output = get_image_url(keyword)
+            image_urls.append(output)
+    except Exception as e:
+        print(f"exception {e}")
+        return {
+            "paragraphs": result,
+            "image_urls": []
+        }
+    return {
+            "paragraphs": result,
+            "image_urls": image_urls
+        }
+
+def generate_keywords_for_images(storyPoints):
+    response = sambanovaClient.chat.completions.create(
+    model="Meta-Llama-3.1-8B-Instruct",
+    messages=[
+        {
+            "role": "system",
+            "content": f"You are a keyword generator. Your task is to analyze the following paragraphs list and generate a one word keyword for each item in paragraph. Keep it simple and make use of everyday objects"
+        },
+        {
+            "role": "user",
+            "content": f""" Using the paragraphs as input, generate a one word keyword for list item. 
+            ```story paragraphs list : {storyPoints} ```
+            Ensure your keyword list is returned in simple array format with just the desired output
+            """ } ],
+    temperature=0.1,
+    top_p=0.1)
     result = response.choices[0].message.content
+
     return result
+
+def get_image_url(keyword):
+    url = f'https://pixabay.com/api/?key={pixabay_api_key}&q={keyword}&image_type=photo&per_page=3'
+    response = requests.get(url)
+    # print(response)
+    data = response.json()
+    # print(data['hits'][0])
+    return data['hits'][0]['webformatURL']
 
 def get_readme_from_files_list(repo_name, file_list, owner):
     response = sambanovaClient.chat.completions.create(

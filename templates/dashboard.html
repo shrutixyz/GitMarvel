@@ -97,6 +97,17 @@
             document.getElementById("logout").style.display="none"
         }
     }
+
+    document.getElementById('storytelling').addEventListener('click', function (event) {
+        event.preventDefault()
+        console.log("here")
+        const selectedStory = document.getElementById('repository-select').value;
+        const owner = selectedStory.split("/")[0]
+        const repo = selectedStory.split("/")[1]
+        console.log(owner, repo)
+        // Navigate to the desired route with the parameter
+        window.location.href = `/story-telling/${repo}/${owner}`;
+    });
 </script>
 </body>
 </html>
