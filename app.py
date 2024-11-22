@@ -8,7 +8,7 @@ import re
 import json
 import asyncio
 from sambanova_utils import *
-
+from github_utils import *
 load_dotenv()
 
 app = Flask(__name__)
@@ -115,6 +115,7 @@ def dashboard():
 @app.route('/code-review', methods=['POST'])
 def code_review():
     data = request.json
+    print(data)
     repo_name = data.get('repo_name')
     commit_sha = data.get('commit_sha')
     owner = data.get('owner')
@@ -198,6 +199,24 @@ def story_telling():
 def logout():
     session.pop('github_access_token')
     return redirect(url_for("index"))
+
+@app.route('/debug')
+def debug():
+    github_token = session.get('github_access_token')
+    res = fetch_profile_info("aakzsh", github_token)
+    return jsonify(res)
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    github_token = session.get('github_access_token') 
+    data = request.json
+    username = data.get('username')
+    question = data.get('question')
+    info = fetch_profile_info(username=username, access_token=github_token)
+    res = aichat(info, question)
+    print(res)
+    return str(res)
+
 
 @app.route('/readme', methods=['POST'])
 def readme():

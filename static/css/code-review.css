@@ -54,3 +54,16 @@
     margin-top: 5px;
     color: #666;
 }
+
+.html-output{
+    width: 15rem;
+    height: 3rem;
+    margin-top: 2rem;
+    border-radius: 0.5rem;
+    color: white;
+    /* background-color: #ffffff20; */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

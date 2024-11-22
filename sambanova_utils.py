@@ -24,8 +24,9 @@ def testai(code_content, language):
             "role": "user",
             "content": f""" Please review the following {language} code and suggest improvements. 
             ```code : {code_content} ```
-            Ensure your feedback is returned in md format with the following fields:- (section, code, feedback) 
+            Ensure your feedback is returned in html string with the following fields:- (section, code, feedback) 
             """ } ],
+
     temperature=0.1,
     top_p=0.1)
     result = parse_markdown(response.choices[0].message.content)
@@ -122,9 +123,8 @@ def get_profile_analysis_from_stats(username, profile_stats):
         },
         {
             "role": "user",
-            "content": f""" Using the following user stats for repository {username}, create a swot analysis. 
+            "content": f""" Using the following user stats for repository {username}, create a swot analysis in html string. 
             profile stats:  ``` json  {profile_stats}```
-            Give response in md format
             """ } ],
     temperature=0.1,
     top_p=0.1)
@@ -135,3 +135,23 @@ def get_profile_analysis_from_stats(username, profile_stats):
 def parse_markdown(content):
     content = content.replace("\n", "<br/>")
     return content
+
+
+def aichat(info, question):
+    response = sambanovaClient.chat.completions.create(
+    model="Meta-Llama-3.1-8B-Instruct",
+    messages=[
+        {
+            "role": "system",
+            "content": f"You are a highly skilled github profile reviewer. Your task is to analyze the following profile info: {info}."
+        },
+        {
+            "role": "user",
+            "content": f""" Please review the following question: "{question}" and answer it in the best way possible.
+            Ensure your feedback is returned in plain text format 
+            """ } ],
+    temperature=0.1,
+    top_p=0.1)
+    result = parse_markdown(response.choices[0].message.content)
+    
+    return result

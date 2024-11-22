@@ -35,9 +35,9 @@
             
         </div>
     </nav>
-    <main>
+    <main id="main">
         <div class="main-container">
-            <p>Hey there, what can I do for you?</p>
+            <p>Hey there, please enter your commit hash</p>
             <div class="select-container">
                 <select id="repository-select" class="custom-select">
                     {% for repo in repos %}
@@ -55,12 +55,17 @@
                 </button>
             </div>
             
-            <div id="html-output"></div>
+            <div id="html-output" class="html-output" style="display: none;">
+                <p><center>Download Code Review</center></p>
+            </div>
         </div>
         <footer class="dashboardfooter">
             GITMARVEL @2024
         </footer>
     </main>
+    <div class="full" id="loader" style="display: none;">
+        <div class="loader"></div>
+    </div>
     <script src="{{ url_for('static', filename='js/code-review.js') }}"></script>
 <script>
     function logoutvisible(){
@@ -74,6 +79,31 @@
             document.getElementById("logout").style.display="none"
         }
     }
+
+        // document.getElementById("code-review").addEventListener("click", function () {
+        //     // Use fetch to call the API
+        //     fetch('/code-review')
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             }
+        //             return response.blob(); // Get the file content as a Blob
+        //         })
+        //         .then(blob => {
+        //             // Create a temporary link element to download the Blob
+        //             const url = window.URL.createObjectURL(blob);
+        //             const a = document.createElement('a');
+        //             a.href = url;
+        //             a.download = 'code-review.txt'; // File name for the downloaded file
+        //             document.body.appendChild(a);
+        //             a.click();
+        //             a.remove();
+        //             window.URL.revokeObjectURL(url); // Clean up the URL object
+        //         })
+        //         .catch(error => {
+        //             console.error('There was an error:', error);
+        //         });
+        // });
 </script>
 </body>
 </html>

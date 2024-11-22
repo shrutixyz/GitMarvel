@@ -33,7 +33,7 @@
             
         </div>
     </nav>
-    <main>
+    <main id="main">
         <div class="main-container">
             <p>Hey there, what can I do for you?</p>
             <div class="select-container">
@@ -46,12 +46,12 @@
                     <img src="{{ url_for('static', filename='icons/down-arrow.svg') }}"></img> <!-- Replace with your icon or image -->
                   </button>                
             </div>
-            <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Ask anything related to your github profile">
-                <button class="send-button">
-                  <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img> <!-- You can replace this with an image or font icon -->
-                </button>
-            </div>   
+            <!-- <div class="chat-input-container"> -->
+                <!-- <input type="text" class="chat-input" placeholder="Ask anything related to your github profile"> -->
+                <!-- <button class="send-button"> -->
+                  <!-- <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img> You can replace this with an image or font icon -->
+                <!-- </button> -->
+            <!-- </div>    -->
             <div class="options-container">
                 <button class="button-with-icon" id="code-review">
                     <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
@@ -65,16 +65,26 @@
                     <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
                     <span class="button-text">Profile Review</span>
                 </button>
-                <button class="button-with-icon" id="generate">
+                <button class="button-with-icon" id="readme">
                     <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
                     <span class="button-text">Generate Readme</span>
                 </button>
-            </div>           
+            </div>  
+            <div id="html-output-profile" class="html-output" style="display: none;">
+                <p><center>Download Profile Review</center></p>
+            </div> 
+            <div id="html-output-readme" class="html-output" style="display: none;">
+                <p><center>Download README</center></p>
+            </div>         
         </div>
         <footer class="dashboardfooter">
             GITMARVEL @2024
         </footer>
     </main>
+    <div class="full" id="loader" style="display: none;">
+        <div class="loader"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 <script>
     function logoutvisible(){
         console.log("lols")
