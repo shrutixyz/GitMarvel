@@ -26,35 +26,57 @@ submitBtn.addEventListener('click', (event) => {
 })
 
 function displayReviewData(responseData) {
-    const review = responseData.review_comments[0].code_review;
-    const finalFeedback = review.final_feedback;
-    const codeData = review.json_data;
-    const finalFeedbackContainer = document.getElementById("final-feedback");
-    const codeReviewSectionsContainer = document.getElementById("code-review-sections");
+    const reviewComments = responseData.review_comments;
+    const reviewsContainer = document.getElementById("reviews-container");
 
-    // Display final feedback
-    finalFeedbackContainer.textContent = `Final Feedback: ${finalFeedback}`;
+    reviewComments.forEach(review => {
+        const filename = review.filename;
+        const reviewData = review.code_review;
+        const finalFeedback = reviewData.final_feedback;
+        const codeData = reviewData.json_data;
 
-    // Display code review items
-    codeData.forEach(item => {
-        const reviewItem = document.createElement("div");
-        reviewItem.classList.add("code-review-item");
+        // Create a container div for each review comment
+        const reviewCommentDiv = document.createElement("div");
+        reviewCommentDiv.classList.add("review-comment");
 
-        const sectionTitle = document.createElement("div");
-        sectionTitle.classList.add("section-title");
-        sectionTitle.textContent = item.section;
+        // Add the filename as the title
+        const fileTitle = document.createElement("div");
+        fileTitle.classList.add("file-title");
+        fileTitle.textContent = `File: ${filename}`;
+        reviewCommentDiv.appendChild(fileTitle);
 
-        const feedbackText = document.createElement("div");
-        feedbackText.classList.add("feedback-text");
-        feedbackText.textContent = item.feedback;
+        // Display final feedback for the file
+        const finalFeedbackContainer = document.createElement("div");
+        finalFeedbackContainer.classList.add("final-feedback");
+        finalFeedbackContainer.textContent = `Final Feedback: ${finalFeedback}`;
+        reviewCommentDiv.appendChild(finalFeedbackContainer);
 
-        const codeBlock = document.createElement("pre");
-        codeBlock.textContent = item.code;
+        // Display code review items for the file
+        const codeReviewSectionsContainer = document.createElement("div");
+        codeData.forEach(item => {
+            const reviewItem = document.createElement("div");
+            reviewItem.classList.add("code-review-item");
 
-        reviewItem.appendChild(sectionTitle);
-        reviewItem.appendChild(feedbackText);
-        reviewItem.appendChild(codeBlock);
+            const sectionTitle = document.createElement("div");
+            sectionTitle.classList.add("section-title");
+            sectionTitle.textContent = item.section;
 
-        codeReviewSectionsContainer.appendChild(reviewItem);
+            const feedbackText = document.createElement("div");
+            feedbackText.classList.add("feedback-text");
+            feedbackText.textContent = item.feedback;
+
+            const codeBlock = document.createElement("pre");
+            codeBlock.textContent = item.code;
+
+            reviewItem.appendChild(sectionTitle);
+            reviewItem.appendChild(feedbackText);
+            reviewItem.appendChild(codeBlock);
+
+            reviewCommentDiv.appendChild(reviewItem);
+        });
+
+        // Append the review comment div to the container
+        reviewsContainer.appendChild(reviewCommentDiv);
     });
 }
+

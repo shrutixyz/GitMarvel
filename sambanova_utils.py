@@ -11,6 +11,7 @@ sambanovaClient = openai.OpenAI(
     base_url="https://api.sambanova.ai/v1",
 )
 def testai(code_content, language):
+    print(code_content[:100], language)
     response = sambanovaClient.chat.completions.create(
     model="Meta-Llama-3.1-8B-Instruct",
     messages=[

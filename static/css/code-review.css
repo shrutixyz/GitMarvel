@@ -1,6 +1,13 @@
+.parentReviewContainer{
+    padding: 2rem;
+    background-color: yellow;
+    overflow-y: scroll;
+}
+
 .review-container {
     max-width: 800px;
     margin: auto;
+    margin-top: 20px;
     background-color: #fff;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
