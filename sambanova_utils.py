@@ -110,3 +110,24 @@ def get_readme_from_files_list(repo_name, file_list, owner):
 
     result = response.choices[0].message.content
     return result
+
+
+def get_profile_analysis_from_stats(username, profile_stats):
+    response = sambanovaClient.chat.completions.create(
+    model="Meta-Llama-3.1-8B-Instruct",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a professional github profile critic. Your task is to do swot analysis of the given github profile from its user stats"
+        },
+        {
+            "role": "user",
+            "content": f""" Using the following user stats for repository {username}, create a swot analysis. 
+            profile stats:  ``` json  {profile_stats}```
+            Give response in md format
+            """ } ],
+    temperature=0.1,
+    top_p=0.1)
+
+    result = response.choices[0].message.content
+    return result

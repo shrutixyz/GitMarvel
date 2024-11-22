@@ -72,6 +72,7 @@ def dashboard():
     access_token = session.get('github_access_token')
     if not access_token:
         return redirect(url_for('get-started'))
+    print(access_token)
 
     user_response = requests.get(
         GITHUB_USER_URL,
@@ -229,12 +230,70 @@ def readme():
                     get_file_names_recursively(owner, repo, item['path'])
     try:
         all_files = get_file_names_recursively(owner=owner, repo=repo_name, path="")
-        print(all_files)
-        return jsonify({"files": all_files})
+        
+        response = get_readme_from_files_list(owner=owner,repo_name=repo_name, file_list=all_files)
+        return jsonify({"readMe": response})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
  
+@app.route('/profile-review')
+
+def get_github_profile_stats():
+    
+    access_token = session.get('github_access_token')
+    username = session.get('userName')
+
+    headers = {
+        "Authorization": f"Bearer {access_token}" if access_token else None,
+        "Accept": "application/vnd.github.v3+json"
+    }
+    
+    base_url = "https://api.github.com"
+    
+    # Fetch user information
+    user_response = requests.get(f"{base_url}/users/{username}", headers=headers)
+    if user_response.status_code != 200:
+        return {"error": f"Unable to fetch user data. Status code: {user_response.status_code}"}
+    user_data = user_response.json()
+    
+    # Fetch user repositories
+    repos_response = requests.get(f"{base_url}/users/{username}/repos?per_page=100", headers=headers)
+    if repos_response.status_code != 200:
+        return {"error": f"Unable to fetch repositories. Status code: {repos_response.status_code}"}
+    repos_data = repos_response.json()
+    
+    # Compute repository stats
+    total_stars = sum(repo.get('stargazers_count', 0) for repo in repos_data)
+    total_forks = sum(repo.get('forks_count', 0) for repo in repos_data)
+    total_open_issues = sum(repo.get('open_issues_count', 0) for repo in repos_data)
+    top_repo = max(repos_data, key=lambda repo: repo.get('stargazers_count', 0), default=None)
+    
+    # Fetch contributions (requires authenticated access)
+    contributions_response = requests.get(f"{base_url}/users/{username}/events", headers=headers)
+    contributions_count = len(contributions_response.json()) if contributions_response.status_code == 200 else "N/A"
+    
+    # Compile stats
+    profile_stats = {
+        "username": user_data.get("login"),
+        "name": user_data.get("name"),
+        "bio": user_data.get("bio"),
+        "followers": user_data.get("followers"),
+        "following": user_data.get("following"),
+        "public_repos": user_data.get("public_repos"),
+        "total_stars": total_stars,
+        "total_forks": total_forks,
+        "total_open_issues": total_open_issues,
+        "top_repo": {
+            "name": top_repo.get("name") if top_repo else None,
+            "stars": top_repo.get("stargazers_count") if top_repo else None,
+            "forks": top_repo.get("forks_count") if top_repo else None,
+        },
+        "recent_contributions_count": contributions_count
+    }
+    response = get_profile_analysis_from_stats(username, profile_stats=profile_stats)
+    return jsonify({"analysis": response})
+
 @app.route('/get-code-review')
 def get_code_review():
     userName = session.get('userName')
