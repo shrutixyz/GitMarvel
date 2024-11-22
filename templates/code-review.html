@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/code-review.css') }}">
+
     <title>GitMarvel - Make your code stand out!</title>
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo-small.svg') }}"type="image/x-icon">
 </head>
 <body>
@@ -47,34 +48,25 @@
                   </button>                
             </div>
             <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Ask anything related to your github profile">
-                <button class="send-button">
+                <input type="text" class="chat-input" id="commit-input" placeholder="Enter commit hash">
+                <button class="send-button" id="send-button">
                   <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img> <!-- You can replace this with an image or font icon -->
                 </button>
-            </div>   
-            <div class="options-container">
-                <button class="button-with-icon" id="code-review">
-                    <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
-                    <span class="button-text"><a href="/get-code-review">Code Review</a></span>
-                </button>
-                <button class="button-with-icon" id="storytelling">
-                    <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
-                    <span class="button-text">Storytelling</span>
-                </button>
-                <button class="button-with-icon" id="profile-review">
-                    <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
-                    <span class="button-text">Profile Review</span>
-                </button>
-                <button class="button-with-icon" id="generate">
-                    <img src="{{ url_for('static', filename='icons/git-merge.svg') }}"alt="icon" class="button-icon">
-                    <span class="button-text">Generate Readme</span>
-                </button>
-            </div>           
+            </div>
+            
+            <div class="review-container">
+                <div id="final-feedback" class="final-feedback"></div>
+                
+                <div id="code-review-sections" class="code-review-section">
+                    <!-- Code review items will be populated here -->
+                </div>
+            </div>
         </div>
         <footer class="dashboardfooter">
             GITMARVEL @2024
         </footer>
     </main>
+    <script src="{{ url_for('static', filename='js/code-review.js') }}"></script>
 <script>
     function logoutvisible(){
         console.log("lols")

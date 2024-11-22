@@ -6,6 +6,8 @@ import os
 import openai
 import re
 import json
+import asyncio
+from sambanova_utils import *
 
 load_dotenv()
 
@@ -70,7 +72,6 @@ def dashboard():
     access_token = session.get('github_access_token')
     if not access_token:
         return redirect(url_for('get-started'))
-    print(access_token)
 
     user_response = requests.get(
         GITHUB_USER_URL,
@@ -78,13 +79,36 @@ def dashboard():
     )
     user_data = user_response.json()
 
-    repos_response = requests.get(GITHUB_REPOS_URL, headers={'Authorization': f'Bearer {access_token}'})
+    repos_url = 'https://api.github.com/user/repos?visibility=all'
+    repos = []
+    while repos_url:
+        headers = {'Authorization': f'token {access_token}'}
+        response = requests.get(repos_url, headers=headers)
+        
+        if response.status_code != 200:
+            print(f"Failed to fetch repos: {response.text}")
+            break
+        
+        repos.extend(response.json())
+        
+        # Check for the next page using the Link header
+        if 'link' in response.headers:
+            links = response.headers['link']
+            next_repos_url = None
+            for link in links.split(','):
+                if 'rel="next"' in link:
+                    next_repos_url = link[link.find('<') + 1:link.find('>')]
+                    break
+            repos_url = next_repos_url
+        else:
+            repos_url = None
 
-    if repos_response.status_code == 200:
-        repos = repos_response.json()  # List of repository objects
-    else:
-        print( f"Error: {repos_response.status_code}", 500)
-    return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'), repos = repos)
+    filtered_repo = [{'name': repo['name'], 'full_name': repo['full_name']} for repo in repos]
+    session["filtered_repo"] = filtered_repo
+    session["avatar_url"] =  user_data.get('avatar_url')
+    session["userName"] = user_data.get('login')
+
+    return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'), repos = filtered_repo)
 
 
 @app.route('/code-review', methods=['POST'])
@@ -94,12 +118,15 @@ def code_review():
     commit_sha = data.get('commit_sha')
     owner = data.get('owner')
     github_token = session.get('github_access_token') # Pass user's GitHub token securely
+    print(github_token, owner, repo_name, commit_sha)
 
     if not repo_name or not commit_sha or not github_token:
         return jsonify({"error": "repo_name, commit_sha, and github_token are required"}), 400
 
     # Step 1: Fetch commit details from GitHub
     commit_url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo_name}/commits/{commit_sha}"
+    print(commit_url)
+
     headers = {'Authorization': f'Bearer {github_token}'}
     commit_response = requests.get(commit_url, headers=headers)
 
@@ -121,14 +148,14 @@ def code_review():
             return jsonify({"error": f"Failed to fetch file content for {file_path}"}), 500
 
         file_content = file_response.text
+        language = get_language_from_extension(file_path)
+        fileresponse = testai(file_content, language=language)
 
-        # Prepare data for AI agent
         file_reviews.append({
             "filename": file_path,
-            "content": file_content
+            "code_review": fileresponse
         })
 
-    # todo: send data to ai agent
     return jsonify({"review_comments": file_reviews})
 
 
@@ -136,6 +163,13 @@ def code_review():
 def logout():
     session.pop('github_access_token')
     return redirect(url_for("index"))
+
+@app.route('/get-code-review')
+def get_code_review():
+    userName = session.get('userName')
+    avatar_url = session.get('avatar_url')
+    repos = session.get('filtered_repo')
+    return render_template('code-review.html', userName=userName, avatar_url = avatar_url, repos = repos)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

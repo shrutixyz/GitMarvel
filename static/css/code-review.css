@@ -1,0 +1,49 @@
+.review-container {
+    max-width: 800px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-y: scroll;
+}
+
+.final-feedback {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.code-review-section {
+    margin-top: 20px;
+}
+
+.code-review-item {
+    background-color: #fafafa;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.code-review-item pre {
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.feedback-text {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #666;
+}
