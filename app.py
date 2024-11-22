@@ -148,22 +148,93 @@ def code_review():
             return jsonify({"error": f"Failed to fetch file content for {file_path}"}), 500
 
         file_content = file_response.text
+        print(file_content  )
         language = get_language_from_extension(file_path)
-        fileresponse = testai(file_content, language=language)
+        fileresponse = testai(file_content[:2000] if len(file_content) > 2000 else file_content, language=language)
 
         file_reviews.append({
             "filename": file_path,
             "code_review": fileresponse
         })
-
     return jsonify({"review_comments": file_reviews})
 
+@app.route('/story-telling', methods=['POST'])
+def story_telling():
+    data = request.json
+    repo_name = data.get('repo_name')
+    owner = data.get('owner')
+
+    github_token = session.get('github_access_token') 
+
+    if not repo_name or not github_token:
+        return jsonify({"error": "repo_name and github_token are required"}), 400
+
+    # Step 1: Fetch commit details from GitHub
+    commit_url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo_name}/commits"
+
+    headers = {'Authorization': f'Bearer {github_token}'}
+    commit_response = requests.get(commit_url, headers=headers)
+
+    if commit_response.status_code == 200:
+        commits = commit_response.json()
+        # Format and return commit details
+        commit_list = [
+            {
+                "sha": commit["sha"],
+                "message": commit["commit"]["message"],
+                "author": commit["commit"]["author"]["name"],
+                "date": commit["commit"]["author"]["date"],
+                "url": commit["html_url"]
+            }
+            for commit in commits
+        ]
+
+        # send message to ai
+        return jsonify(commit_list)
+    return jsonify({"error": f"Failed to fetch commits: {commit_response.status_code}"}), commit_response.status_code
 
 @app.route('/logout')
 def logout():
     session.pop('github_access_token')
     return redirect(url_for("index"))
 
+@app.route('/readme', methods=['POST'])
+def readme():
+    data = request.json
+    repo_name = data.get('repo_name')
+    owner = data.get('owner')
+
+    github_token = session.get('github_access_token')
+
+    if not repo_name or not github_token:
+        return jsonify({"error": "repo_name and github_token are required"}), 400
+
+    # Step 1: Fetch commit details from GitHub
+    commit_url = f"{GITHUB_API_BASE_URL}/repos/{owner}/{repo_name}/contents"
+
+    headers = {'Authorization': f'Bearer {github_token}'}
+
+    def get_file_names_recursively(owner, repo, path):
+        url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            contents = response.json()
+            for item in contents:
+                if item['type'] == 'file':
+                    print(item['path'])   
+
+                elif item['type'] == 'dir':
+                    get_file_names_recursively(owner, repo, item['path'])
+    try:
+        all_files = get_file_names_recursively(owner=owner, repo=repo_name, path="")
+        print(all_files)
+        return jsonify({"files": all_files})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+ 
 @app.route('/get-code-review')
 def get_code_review():
     userName = session.get('userName')
