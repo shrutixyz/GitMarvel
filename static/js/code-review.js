@@ -8,6 +8,7 @@ submitBtn.addEventListener('click', (event) => {
     let ownerName = repoValue.value.split("/")[0]
     let commitHash = commitHashInput.value;
 
+    removeReviewData()
     console.log(repoName, ownerName,commitHash);
 
     fetch('/code-review', {
@@ -24,6 +25,14 @@ submitBtn.addEventListener('click', (event) => {
             displayReviewData(data)
         });
 })
+
+function removeReviewData()
+{
+    const reviewsContainer = document.getElementById("reviews-container");
+
+    // Remove all child elements
+    reviewsContainer.replaceChildren(); 
+}
 
 function displayReviewData(responseData) {
     const reviewComments = responseData.review_comments;
