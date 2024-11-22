@@ -3,12 +3,16 @@ from flask_cors import CORS
 import requests
 from dotenv import load_dotenv
 import os
+import openai
+import re
+import json
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
+CORS(app)  # This will allow all origins by default
 
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
@@ -17,8 +21,11 @@ GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL = "https://api.github.com/user"
 GITHUB_REPOS_URL = "https://api.github.com/user/repos"
 GITHUB_API_BASE_URL = "https://api.github.com"
-CORS(app)  # This will allow all origins by default
 
+sambanovaClient = openai.OpenAI(
+    api_key=os.environ.get("SAMBANOVA_API_KEY"),
+    base_url="https://api.sambanova.ai/v1",
+)
 
 @app.route('/')
 def index():
@@ -63,6 +70,7 @@ def dashboard():
     access_token = session.get('github_access_token')
     if not access_token:
         return redirect(url_for('get-started'))
+    print(access_token)
 
     user_response = requests.get(
         GITHUB_USER_URL,
@@ -79,7 +87,7 @@ def dashboard():
     return render_template('dashboard.html', userName=user_data.get('login'), avatar_url = user_data.get('avatar_url'), repos = repos)
 
 
-@app.route('/code-review')
+@app.route('/code-review', methods=['POST'])
 def code_review():
     data = request.json
     repo_name = data.get('repo_name')
@@ -128,7 +136,6 @@ def code_review():
 def logout():
     session.pop('github_access_token')
     return redirect(url_for("index"))
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
