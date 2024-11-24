@@ -15,14 +15,13 @@
     {% for image_url, paragraph in pages %}
 
         <div class="page" id="page{{ loop.index }}">
-            <!-- <h2>Page {{ loop.index }}</h2> -->
             <img class="display-img" src="{{ image_url }}" alt="Image for page {{ loop.index }}">
             <p>{{ paragraph }}</p>
         </div>
     {% endfor %}
 {% else %}
     {% for paragraph in pages %}
-            <h2>Page {{ loop.index }}</h2>
+        <div class="page" >
             <p>{{ paragraph }}</p>
         </div>
     {% endfor %}
