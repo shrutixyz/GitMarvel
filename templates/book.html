@@ -22,7 +22,6 @@
     {% endfor %}
 {% else %}
     {% for paragraph in pages %}
-        <div class="page" id="page{{ pages|length - loop.index }}">
             <h2>Page {{ loop.index }}</h2>
             <p>{{ paragraph }}</p>
         </div>
