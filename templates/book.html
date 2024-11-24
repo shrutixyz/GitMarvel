@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flipping Page UI</title>
+  <title>GitMarvel - Make your code stand out!</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
-    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo-small.svg') }}"type="image/x-icon">
 </head>
 <body>
   <h1>Journey of {{repo}}</h1>
@@ -22,7 +22,7 @@
     {% endfor %}
 {% else %}
     {% for paragraph in pages %}
-        <div class="page" id="page{{ pages.length - loop.index }}">
+        <div class="page" id="page{{ pages|length - loop.index }}">
             <h2>Page {{ loop.index }}</h2>
             <p>{{ paragraph }}</p>
         </div>

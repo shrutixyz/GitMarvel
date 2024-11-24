@@ -73,7 +73,7 @@ function displayReviewDataProfile(content)
 {
     const output = document.getElementById('html-output-profile');
         var text = ""
-        const formattedText = content.replace(/\n/g, "<br/>");
+        const formattedText = content.replace(/\n/g, "");
         output.style.display = "block"
             output.addEventListener("click", () => {
                 // Create a blob with the content of xyz

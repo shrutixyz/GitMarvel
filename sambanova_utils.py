@@ -29,12 +29,12 @@ def testai(code_content, language):
             "role": "user",
             "content": f""" Please review the following {language} code and suggest improvements. 
             ```code : {code_content} ```
-            Ensure your feedback is returned in html string with the following fields:- (section, code, feedback) 
+            Ensure your feedback is returned in html string with the following fields:- (section, code, feedback). Make bg #1f1f1f, text white and font sans-serif
             """ } ],
 
     temperature=0.1,
     top_p=0.1)
-    result = parse_markdown(response.choices[0].message.content)
+    result = extract_between_brackets(response.choices[0].message.content)
     
     return result
 
@@ -121,6 +121,8 @@ def generate_keywords_for_images(storyPoints):
     response = sambanovaClient.chat.completions.create(
     model="Meta-Llama-3.1-8B-Instruct",
     messages=[
+                    # "content": f"You are an efficient keyword generator machine. Your task is to analyze the following paragraphs list and generate a one word keyword for each item in paragraph. Keep it simple and make use of everyday objects, as i need to download images based on keywords"
+
         {
             "role": "system",
             "content": f"You are a keyword generator. Your task is to analyze the following paragraphs list and generate a one word keyword for each item in paragraph. Keep it simple and make use of everyday objects"
@@ -164,6 +166,17 @@ def get_readme_from_files_list(repo_name, file_list, owner):
     result = response.choices[0].message.content
     return result
 
+def extract_between_brackets(input_str):
+    # Find the first occurrence of '<' and the last occurrence of '>'
+    start = input_str.find('<')
+    end = input_str.rfind('>')
+    
+    # If both are found, slice the string; otherwise, return an empty string
+    if start != -1 and end != -1 and start < end:
+        res = str(input_str[start: end+1])
+        res.replace("<br/>", "")
+        return res
+    return ""
 
 def get_profile_analysis_from_stats(username, profile_stats):
     response = sambanovaClient.chat.completions.create(
@@ -175,23 +188,46 @@ def get_profile_analysis_from_stats(username, profile_stats):
         },
         {
             "role": "user",
-            "content": f""" Using the following user stats for repository {username}, create a swot analysis in html string. 
+            "content": f""" Using the following user stats for repository {username}, create a swot analysis in html string. Add #1f1f1f bg color, white text color and sans serif font
             profile stats:  ``` json  {profile_stats}```
             """ } ],
     temperature=0.1,
     top_p=0.1)
 
     result = response.choices[0].message.content
-    return result
+    return extract_between_brackets(result)
 
 def parse_markdown(content):
     content = content.replace("\n", "<br/>")
     return content
 
-
-def aichat(info, question):
+models_list = ["Meta-Llama-3.2-1B-Instruct", "Meta-Llama-3.2-3B-Instruct", "Llama-3.2-11B-Vision-Instruct", "Llama-3.2-90B-Vision-Instruct", "Meta-Llama-3.1-8B-Instruct", "Meta-Llama-3.1-70B-Instruct", "Meta-Llama-3.1-405B-Instruct"]
+def determine_model(question):
     response = sambanovaClient.chat.completions.create(
     model="Meta-Llama-3.1-8B-Instruct",
+    messages=[
+        {
+            "role": "system",
+            "content": f"Your task is to return the perfect model to use for the given question, out of {models_list}"
+        },
+        {
+            "role": "user",
+            "content": f""" Please review the following question: "{question}" and return the model which will best answer this query. Just return the string with model name and nothing else.
+            """ } ],
+            temperature=0.1,
+    top_p=0.1)
+    print(response)
+    res = response.choices[0].message.content  
+    if res not in models_list:
+        return models_list[0]
+    return res
+
+
+
+def aichat(info, question, prev):
+    model_to_use = determine_model(question)
+    response = sambanovaClient.chat.completions.create(
+    model = model_to_use,
     messages=[
         {
             "role": "system",
@@ -199,11 +235,11 @@ def aichat(info, question):
         },
         {
             "role": "user",
-            "content": f""" Please review the following question: "{question}" and answer it in the best way possible.
-            Ensure your feedback is returned in plain text format 
+            "content": f""" Please review the following question: "{question}" and answer it in the best way possible within 50 words please. Earlier question was {prev}, incase you need this info
+            Ensure your feedback is returned in plain text format
             """ } ],
     temperature=0.1,
     top_p=0.1)
     result = parse_markdown(response.choices[0].message.content)
     
-    return result
+    return [result, model_to_use]

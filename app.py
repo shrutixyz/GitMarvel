@@ -338,10 +338,17 @@ def chatui():
 # API route to handle message addition dynamically
 @app.route("/send_message", methods=["POST"])
 def send_message():
-    user_message = request.json.get("message", "")
+    question = request.json.get("message", "")
+    prev = request.json.get("prev", "")
+    github_token = session.get('github_access_token') 
+    data = request.json
+    username = session.get('userName')
+    info = fetch_profile_info(username=username, access_token=github_token)
+    res = aichat(info, question, prev)
+    print(f"res is {res[0]}")
     # Example bot response (replace with your logic)
-    bot_response = f"Bot says: {user_message[::-1]}"  # Reverses the user message
-    return jsonify({"bot_response": bot_response})
+    bot_response = f"{res[0]}"  # Reverses the user message
+    return jsonify({"bot_response": bot_response, "model": res[1]})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

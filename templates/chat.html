@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat UI</title>
+    <title>GitMarvel - Make your code stand out!</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo-small.svg') }}"type="image/x-icon">
 </head>
+
 <body>
     <div id="chat-container">
         <div id="chat-box">
@@ -16,21 +18,31 @@
         <div class="input-box">
             <input type="text" id="user-input" placeholder="Type a message...">
             <button class="send-btn" id="send-btn">
-              <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img>
+                <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img>
             </button>
-        </div> 
+        </div>
     </div>
 
     <script>
+        let prev = "";
         const chatBox = document.getElementById("chat-box");
         const userInput = document.getElementById("user-input");
         const sendBtn = document.getElementById("send-btn");
-
+        userInput.addEventListener('keydown', (event) => {
+      // Check if the pressed key is Enter
+      if (event.key === 'Enter') {
+        // Check if the input field is not blank (trim removes whitespace)
+        if (userInput.value.trim() !== '') {
+          // Trigger the button click
+          sendBtn.click();
+        }
+      }
+    });
         sendBtn.addEventListener("click", () => {
             const message = userInput.value.trim();
             if (message) {
                 // Add user message to chat
-                addMessage("User", message);
+                addMessage("User", message, "");
                 userInput.value = "";
 
                 // Send message to the server
@@ -39,26 +51,50 @@
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ message })
+                    body: JSON.stringify({ message, prev })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    // Add bot response to chat
-                    addMessage("Bot", data.bot_response);
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        // Add bot response to chat
+                        addMessage("Bot", data.bot_response, data.model);
+                        prev = message;
+                    });
             }
         });
-
-        function addMessage(sender, message) {
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        async function addMessage(sender, message, model) {
             const msgDivParent = document.createElement("div");
             const msgDiv = document.createElement("div");
             msgDiv.classList.add(sender.toLowerCase() + "-message");
             msgDiv.innerText = `${message}`;
+            if(sender!="User"){
+                msgDiv.innerText += `\n\ngenerated using: ${model}`
+            }
             msgDivParent.classList.add(sender.toLowerCase() + "-messageParent")
+            const loadingFlow = document.createElement('div');
+            loadingFlow.classList.add('loading');
+
+            // Create the three span elements
+            for (let i = 0; i < 3; i++) {
+                const span = document.createElement('span');
+                loadingFlow.appendChild(span);
+            }
+
             msgDivParent.appendChild(msgDiv);
+            loadingFlow.classList.add(sender.toLowerCase() + "-message");
+            if(sender!="User"){
+                
+                chatBox.appendChild(loadingFlow);
+                await sleep(2000);
+            }
+            
+            if(sender!="User"){
+                chatBox.removeChild(loadingFlow);
+            }
             chatBox.appendChild(msgDivParent);
             chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
         }
     </script>
 </body>
+
 </html>
