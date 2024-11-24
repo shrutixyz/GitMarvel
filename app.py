@@ -330,5 +330,18 @@ def get_code_review():
 def book():
     return render_template('book.html')
 
+# Route to render the chat UI
+@app.route("/render-chat")
+def chatui():
+    return render_template("chat.html")
+
+# API route to handle message addition dynamically
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    user_message = request.json.get("message", "")
+    # Example bot response (replace with your logic)
+    bot_response = f"Bot says: {user_message[::-1]}"  # Reverses the user message
+    return jsonify({"bot_response": bot_response})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

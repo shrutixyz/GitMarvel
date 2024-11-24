@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="input-box">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button class="send-btn" id="send-btn">
+              <img class="send-icon" src="{{ url_for('static', filename='icons/send-icon.svg') }}"></img>
+            </button>
+        </div> 
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        sendBtn.addEventListener("click", () => {
+            const message = userInput.value.trim();
+            if (message) {
+                // Add user message to chat
+                addMessage("User", message);
+                userInput.value = "";
+
+                // Send message to the server
+                fetch("/send_message", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Add bot response to chat
+                    addMessage("Bot", data.bot_response);
+                });
+            }
+        });
+
+        function addMessage(sender, message) {
+            const msgDivParent = document.createElement("div");
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add(sender.toLowerCase() + "-message");
+            msgDiv.innerText = `${message}`;
+            msgDivParent.classList.add(sender.toLowerCase() + "-messageParent")
+            msgDivParent.appendChild(msgDiv);
+            chatBox.appendChild(msgDivParent);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+        }
+    </script>
+</body>
+</html>
