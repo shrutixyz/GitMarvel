@@ -41,18 +41,15 @@ readme.addEventListener('click', (event) => {
     mainStuff.style.display = "none";
     loaderStuff.style.display = "flex"
     event.preventDefault();
-    // let repoName = repoValue.value.split("/")[1]
+    let repoName = repoValue.value.split("/")[1]
     let ownerName = repoValue.value.split("/")[0]
-    // let commitHash = commitHashInput.value;
-
-    // console.log(repoName, ownerName,commitHash);
 
     fetch('/readme', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ repo_name: repoValue, owner: ownerName}),
+            body: JSON.stringify({ repo_name: repoName, owner: ownerName}),
         })
         .then(response => response.json())
         .then(data => {
